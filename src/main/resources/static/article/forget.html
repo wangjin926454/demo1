@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="content-type" content="text/html;charset=utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>index</title>
+    <link rel="shortcut icon" type="image/x-icon" href="../images/index.ico" />
+    <link rel="stylesheet" href="../css/bootstrap-theme.css">
+    <link rel="stylesheet" href="../css/bootstrap.css">
+    <link rel="stylesheet" href="../css/my.css">
+    <script src="../js/bootstrap.js"></script>
+    <script src="../js/jquery.js"></script>
+    <script src="../js/my.js"></script>
+</head>
+<body>
+<script>
+    function sendEmail() {
+        //$("#btn1").attr("disabled","true");
+        var userName = $("#username").eq(0).val();
+        var qq = $("#qq").eq(0).val();
+        $.ajax({
+            type: "POST",
+            async: false,
+            url: "sendEmail.do",
+            dataType: "json",
+            scriptCharset: 'GBK',
+            data: {
+                "userName": userName,
+                "qq": qq
+            },
+            success: function (result) {
+                var str = JSON.stringify(result);
+                var json = JSON.parse(str);
+                alert(json.msg);
+                //$("#btn1").attr("disabled","false");
+            },
+            error: function () {
+                alert("服务器出现错误");
+                //$("#btn1").attr("disabled","false");
+            }
+        });
+    }
+</script>
+<div class="E-mail">
+    <div class="form-group">
+        <h3>请输入您的邮箱,我们将发送邮件给您！</h3>
+    </div>
+    <div class="form-group">
+        <input type="text" class="form-control" id="username" name="username" placeholder="用户名">
+        <input type="text" class="form-control" id="qq" name="qq" placeholder="请输入QQ邮箱">
+        <button class="btn btn-default" onclick="sendEmail();" id="btn1">确定</button>
+    </div>
+
+</div>
+</body>
+</html>

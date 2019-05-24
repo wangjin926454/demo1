@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="content-type" content="text/html;charset=utf-8"/>
+    <meta name="viewport" content="width=device-width,height=device-height,inital-scale=1.0,maximum-scale=1.0,user-scalable=no">
+    <meta content="yes" name="apple-mobile-web-app-capable">
+    <meta name="format-detection" content="telephone=no" />
+    <link rel="stylesheet" href="../css/bootstrap-theme.css">
+    <link rel="stylesheet" href="../css/bootstrap.css">
+    <link rel="stylesheet" href="../css/my.css">
+    <script src="../js/bootstrap.js"></script>
+    <script src="../js/jquery.js"></script>
+    <script src="../js/my.js"></script>
+    <title>Title</title>
+    <script>
+        var userName ;
+        function end() {
+            var str=location.href; //取得整个地址栏
+            var arr = str.split("?");
+            userName = arr[1];
+            //userName = document.getElementById("user").innerText = arr[1];
+            //alert(userName);
+            selectEmail();
+        }
+        function down(n1) {
+            var id = "down1"+n1;
+            //alert(id);
+            var v = document.getElementById(id).value;
+            alert(v);
+            $.ajax({
+                type: "get",
+                async: false,
+                url: "download.do",
+                dataType: "json",
+                scriptCharset: 'GBK',
+                data: {
+                    "path1": v
+                },
+                success: function (result) {
+                    var str = JSON.stringify(result);
+                    var json = JSON.parse(str);
+                    alert(json.msg);
+                },
+                error: function () {
+                    alert("下载出错");
+                }
+            });
+        }
+        function selectEmail() {
+            $.ajax({
+                type: "POST",
+                async: false,
+                url: "selectEmail.do",
+                dataType: "json",
+                scriptCharset: 'GBK',
+                data: "",
+                success: function (result) {
+                    var str = JSON.stringify(result);
+                    //alert(str);
+                    var json = JSON.parse(str);
+                    var n1=0;
+                    if(Object.keys(json).length>0){
+                        for(var n in json){
+                            document.getElementById("div1").innerHTML+=
+                                "<sapn style='cursor: pointer;' onclick='sendEmail1("+json[n].cqq+");'>"+
+                                "<span id='title"+n1+"'>"+json[n].cname+"</span><br>" ;
+                            n1++;
+                        }
+                    }else {
+                        $("#div1").eq(0).innerText="没有数据";
+                    }
+                },
+                error: function () {
+                    alert("没有数据");
+                }
+            });
+        }
+        function sendEmail1(str) {
+            //alert(str);
+            $("#div1").eq(0).attr("style","display:none");
+            $("#div2").eq(0).attr("style","display:none");
+            $("#div4").eq(0).attr("style","display:block");
+            document.getElementById("company_boss").value = str;
+            //$("#company_boss").eq(0).value = str;
+        }
+        function my_index0_click() {
+            $("#div1").eq(0).attr("style","display: block");
+            $("#div2").eq(0).attr("style","display: none");
+            $("#div3").eq(0).attr("style","display: none");
+            $("#div4").eq(0).attr("style","display: none");
+        }
+        function my_index1_click() {
+            $("#div1").eq(0).attr("style","display: none");
+            $("#div2").eq(0).attr("style","display: block");
+            $("#div3").eq(0).attr("style","display: none");
+            $("#div4").eq(0).attr("style","display: none");
+            $.ajax({
+                type: "POST",
+                async: false,
+                url: "selectEmail1.do",
+                dataType: "json",
+                scriptCharset: 'GBK',
+                data: "",
+                success: function (result) {
+                    var str = JSON.stringify(result);
+                    //alert(str);
+                    var json = JSON.parse(str);
+                    var n1=0;
+                    document.getElementById("div2").innerHTML = "";
+                    if(Object.keys(json).length>0){
+                        for(var n in json){
+                            document.getElementById("div2").innerHTML+=
+                                "<sapn style='cursor: pointer;' onclick='sendEmail1("+json[n].qq+");'>"+
+                                "<span id='title"+n1+"'>"+json[n].name+"</span><br>" ;
+                            n1++;
+                        }
+                    }else {
+                        $("#div1").eq(0).innerText="没有数据";
+                    }
+                },
+                error: function () {
+                    alert("没有数据");
+                }
+            });
+        }
+        function sendEmail3(str) {
+            alert(str);
+        }
+        function my_index2_click() {
+            $("#div1").eq(0).attr("style","display: none");
+            $("#div2").eq(0).attr("style","display: none");
+            $("#div4").eq(0).attr("style","display: none");
+            $("#div3").eq(0).attr("style","display: block");
+            $.ajax({
+                type: "POST",
+                async: false,
+                url: "selectEmail2.do",
+                dataType: "json",
+                scriptCharset: 'GBK',
+                data: "",
+                success: function (result) {
+                    var str = JSON.stringify(result);
+                    //alert(str);
+                    var json = JSON.parse(str);
+                    var n1=0;
+                    document.getElementById("div3").innerHTML = "";
+                    if(Object.keys(json).length>0){
+                        for(var n in json){
+                            document.getElementById("div3").innerHTML+=//,"+json[n].sender+","+json[n].text1+","+json[n].title+","+json[n].filePath+"
+                                "<sapn style='cursor: pointer;' onclick='readEmail("+json[n].id+");'>"+
+                                "<span id='title1"+n1+"'>收件人:  "+json[n].recipient+"                   发件人:  "+json[n].sender+"</span><br>" ;
+                            n1++;
+                        }
+                    }else {
+                        $("#div1").eq(0).innerText="没有数据";
+                    }
+                },
+                error: function () {
+                    alert("没有数据");
+                }
+            });
+        }//,sender,text1,title,filePath
+        function readEmail(id) {
+            //alert(id);
+            $.ajax({
+                type: "get",
+                async: false,
+                url: "selectEmailByID.do",
+                dataType: "json",
+                scriptCharset: 'GBK',
+                data: {
+                    "id": id
+                },
+                success: function (result) {
+                    var str = JSON.stringify(result);
+                    var json = JSON.parse(str);
+                    path1 = json.filePath;
+                    filePath = json.filePath.split("/");
+                    path = filePath[filePath.length-1];
+                    //alert(path);
+                    document.getElementById("div3").innerHTML = "";
+                    document.getElementById("div3").innerHTML+=//,"+json[n].sender+","+json[n].text1+","+json[n].title+","+json[n].filePath+"
+                        "<span>收件人:  "+json.recipient+'@qq.com'+"</span><br>" +
+                        "<span>发件人:  "+json.sender+"</span><br>"+
+                        "<span>主题:  "+json.title+"</span><br>"+
+                        "<span>内容:  "+json.text1+"</span><br>"+
+                        "<button>附件:<a href='downloadEmailFile.do/?path1="+path1+"'>"+path+"</a></button><br>";
+                },
+                error: function () {
+                    alert("系统错误");
+                }
+            });
+        }
+        function sendEmail2() {
+            var type = "file";          //后台接收时需要的参数名称，自定义即可
+            var id = "file";            //即input的id，用来寻找值
+            var recipient = document.getElementById("company_boss").value;
+            var title = document.getElementById("company_web").value;
+            var text = document.getElementById("company_web1").value;
+            //var guishu = userName;
+            var formData = new FormData();
+            formData.append(type, $("#"+id)[0].files[0]);    //生成一对表单属性
+            formData.append('recipient',recipient);
+            formData.append('title',title);
+            formData.append('text',text);
+            $.ajax({
+                type: "POST",           //因为是传输文件，所以必须是post
+                url: 'sendEmail2.do',         //对应的后台处理类的地址
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function (result) {
+                    var str = JSON.stringify(result);
+                    //alert(str);
+                    var json = JSON.parse(str);
+                    alert(json.msg);
+                    location.reload(true);
+                },
+                error: function () {
+                    alert("错误")
+                }
+            });
+        }
+        function save_hetong() {
+            var type = "file";          //后台接收时需要的参数名称，自定义即可
+            var id = "file";            //即input的id，用来寻找值
+            var cname = document.getElementById("company_boss").value;
+            var hname = document.getElementById("company_web").value;
+            var beizhu = document.getElementById("phone").value;
+            var guishu = userName;
+            var formData = new FormData();
+            formData.append(type, $("#"+id)[0].files[0]);    //生成一对表单属性
+            formData.append('cname',cname);
+            formData.append('hname',hname);
+            formData.append('beizhu',beizhu);
+            formData.append('guishu',guishu);
+            $.ajax({
+                type: "POST",           //因为是传输文件，所以必须是post
+                url: 'uploadHeTong.do',         //对应的后台处理类的地址
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function (result) {
+                    var str = JSON.stringify(result);
+                    //alert(str);
+                    var json = JSON.parse(str);
+                    if(json.msg=="success"){
+                        alert("保存成功");
+                        location.reload(true);
+                    }else{
+                        alert("保存失败");
+                    }
+                },
+                error: function () {
+                    alert("错误")
+                }
+            });
+        }
+    </script>
+    <style>
+        .index_area{
+            margin-top: -6%;
+            margin-left: 6%;
+            width: 1400px;
+            height: 650px;
+        }
+        .div1{
+            margin-top: -5%;
+            margin-left: 15%;
+        }
+        .div2{
+            margin-top: -34%;
+        }
+    </style>
+</head>
+<body onload="end();">
+<div>
+
+    <div class="list-group" style="width: 6%">
+        <button onclick="my_index0_click();" class="btn btn-primary">客户邮件发送</button>
+    </div>
+    <div class="list-group" style="width: 6%">
+        <button onclick="my_index1_click();" class="btn btn-primary">公司邮件发送</button>
+    </div>
+    <div class="list-group" style="width: 6%">
+        <button onclick="my_index2_click();" class="btn btn-primary">查看已发送邮件</button>
+    </div>
+    <div id="div1" style="display: block" class="div1">
+
+    </div>
+    <div id="div2" style="display: none" class="div1">
+        test
+    </div>
+    <div id="div3" style="display: none" class="div1">
+
+    </div>
+    <div id="div4" style="display: none" class="div1">
+        <div class="form-group">
+            <label for="company_boss">收件人</label>
+            <input type="text" class="form-control" id="company_boss" name="company_boss" value="" readonly>
+        </div>
+        <div class="form-group">
+            <label for="company_web">主题</label>
+            <input type="text" class="form-control" id="company_web" name="company_web">
+        </div>
+        <div class="form-group">
+            <label for="company_web1">内容</label>
+            <textarea class="form-control" id="company_web1"  rows="10" name="company_web"></textarea>
+        </div>
+        <div class="form-group">
+            <label for="file">附件</label>
+            <input type="file" class="form-control " id="file" name="file">
+        </div>
+        <button type="button" class="btn btn-success" onclick="sendEmail2()" style="width: 100%">发送</button>
+    </div>
+    <!--<div class="index_area">
+        <div id="create_file" class="div1">
+            <button type="button" class="btn btn-success" onclick="create_file()">新建合同</button>
+        </div>
+        <div id="create_file1" style="display: none" class="div6">
+            <div class="form-group">
+                <label for="company_boss">客户</label>
+                <input type="text" class="form-control" id="company_boss" name="company_boss">
+            </div>
+            <div class="form-group">
+                <label for="company_web">合同名称</label>
+                <input type="text" class="form-control" id="company_web" name="company_web">
+            </div>
+            <div class="form-group">
+                <label for="file">附件</label>
+                <input type="file" class="form-control " id="file" name="file">
+            </div>
+            <div class="form-group">
+                <label for="phone">备注</label>
+                <input type="text" class="form-control" id="phone" name="phone">
+            </div>
+            <button type="button" class="btn btn-success" onclick="save_hetong()" style="width: 100%">保存</button>
+        </div>
+    </div>
+    <div id="div2" class="div2" style="display: block">
+        <table id="file_list" class="table table-hover table-bordered">
+            <tr>
+                <td>客户</td>
+                <td>合同名称</td>
+                <td>备注</td>
+                <td>合同签署人</td>
+                <td>下载此合同</td>
+            </tr>
+        </table>
+    </div>-->
+</div>
+</body>
+</html>

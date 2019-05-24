@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="content-type" content="text/html;charset=utf-8"/>
+    <meta name="viewport" content="width=device-width,height=device-height,inital-scale=1.0,maximum-scale=1.0,user-scalable=no">
+    <meta content="yes" name="apple-mobile-web-app-capable">
+    <meta name="format-detection" content="telephone=no" />
+    <link rel="stylesheet" href="../css/bootstrap-theme.css">
+    <link rel="stylesheet" href="../css/bootstrap.css">
+    <link rel="stylesheet" href="../css/my.css">
+    <script src="../js/bootstrap.js"></script>
+    <script src="../js/jquery.js"></script>
+    <script src="../js/my.js"></script>
+    <title>Title</title>
+    <style>
+        .h2c{
+            text-align: center;
+            font-size: large;
+        }
+    </style>
+    <script>
+        var userName ;
+        function end() {
+            var str=location.href; //取得整个地址栏
+            var arr = str.split("?");
+            userName = arr[1];
+            $.ajax({
+                type: "POST",
+                async: false,
+                url: "selectMessage.do",
+                dataType: "json",
+                scriptCharset: 'GBK',
+                data:"",
+                success: function (result) {
+                    var str = JSON.stringify(result);
+                    //alert(str);
+                    var json = JSON.parse(str);
+                    var n1 = 0;
+                    for(var n in json){
+                        document.getElementById("my_index").innerHTML+=
+                            "<sapn style='cursor: pointer;' onclick='msg("+n1+");'>"+
+                            "<span id='title"+n1+"'>"+json[n].mtitle+"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</span>" +
+                            "<span id='msg"+n1+"'>"+json[n].userName+"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</span>" +
+                            "<span id='msg"+n1+"'>"+json[n].createtime+"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</span>"+
+                            "<span id='message"+n1+"' style='display: none'>"+json[n].message+"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</span><br>"+
+                            "</sapn>";
+                        n1++;
+                    }
+                },
+                error: function () {
+                    alert("没有数据");
+                }
+            });
+        }
+        function msg(n1) {
+            $("#my_center").eq(0).attr("style","display: none");
+            $("#my_index").eq(0).attr("style","display: none");
+            $("#divv1").eq(0).attr("style","display: block");
+            var tid = "title"+n1;
+            var msg = "message"+n1;
+            tid = document.getElementById(tid).innerText;
+            msg = document.getElementById(msg).innerText;
+            msg = msg.replace(/(\r\n)|(\n)/g,"<br/>");//换行符替换为<br/>
+            msg = msg.replace(/\s/g,"&nbsp;");//空格替换为&nbsp;
+            document.getElementById("divv1").innerHTML=
+                "<span class='h2c'><b>"+tid+"</b></span>"+
+                "<p>"+msg+"</p>";
+        }
+        function my_index_click() {
+            $("#my_center").eq(0).attr("style","display: none");
+            $("#my_index").eq(0).attr("style","display: block");
+            $("#divv1").eq(0).attr("style","display: none");
+        }
+        function my_center_click() {
+            $("#my_center").eq(0).attr("style","display: block");
+            $("#my_index").eq(0).attr("style","display: none");
+            $("#divv1").eq(0).attr("style","display: none");
+        }
+        function save3() {
+            var cname = document.getElementById("mname").value;
+            var message = document.getElementById("message").value;
+            $.ajax({
+                type: "POST",
+                async: false,
+                url: "saveMessage.do",
+                dataType: "json",
+                scriptCharset: 'GBK',
+                data: {
+                    "mtitle": cname,
+                    "message": message,
+                    "userName": userName
+                },
+                success: function (result) {
+                    var str = JSON.stringify(result);
+                    //alert(str);
+                    var json = JSON.parse(str);
+                    if(json.msg=="success"){
+                        alert("保存成功");
+                        location.reload(true);
+                    }else{
+                        alert("保存失败");
+                    }
+                },
+                error: function () {
+                    alert("没有数据");
+                }
+            });
+        }
+    </script>
+    <style>
+        .index_area{
+            margin-top: 1%;
+            margin-left: 6%;
+            width: 1400px;
+            height: 650px;
+        }
+        .divv1{
+        }
+    </style>
+</head>
+<body onload="end();">
+<div>
+    <div class="list-group">
+        <button onclick="my_index_click();" class="btn btn-primary">公告列表</button>
+        <p></p>
+        <button onclick="my_center_click();" class="btn btn-primary">发布公告</button>
+    </div>
+    <div class="index_area">
+        <div id="my_index" style="display: block">
+
+        </div>
+        <div id="my_center" style="display: none">
+            <div class="form-group">
+                <label for="mname">公告名称</label>
+                <input type="text" class="form-control" id="mname" name="mname">
+            </div>
+            <div class="form-group">
+                <label for="message">公告内容</label>
+                <textarea class="form-control" rows="10" id="message"  name="message"></textarea>
+            </div>
+            <button type="button" class="btn btn-success" onclick="save3()" style="width: 100%">保存</button>
+        </div>
+        <div id="divv1" style="display: none" class="divv1">
+
+        </div>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.demo.dao.LoginDAO">
+    <!-- 查询所有用户数据 -->
+    <select id="adminLogin"  parameterType="com.example.demo.entity.LoginInfo" resultMap="adminLoginMap">
+        select  * from admin where userName=#{userName} and password=#{password}
+    </select>
+    <resultMap id="adminLoginMap" type="com.example.demo.entity.LoginInfo">
+        <result column="userName" property="userName"/>
+        <result column="password" property="password"/>
+    </resultMap>
+    <select id="select"  parameterType="com.example.demo.entity.LoginInfo" resultMap="adminLoginMap">
+        select  password from users where userName=#{userName}
+    </select>
+    <select id="login"  parameterType="com.example.demo.entity.LoginInfo" resultMap="loginMap">
+        select  * from users where userName=#{userName} and password=#{password}
+    </select>
+    <resultMap id="loginMap" type="com.example.demo.entity.LoginInfo">
+        <result column="userName" property="userName"/>
+        <result column="password" property="password"/>
+    </resultMap>
+</mapper>

@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="content-type" content="text/html;charset=utf-8"/>
+    <meta name="viewport" content="width=device-width,height=device-height,inital-scale=1.0,maximum-scale=1.0,user-scalable=no">
+    <meta content="yes" name="apple-mobile-web-app-capable">
+    <meta name="format-detection" content="telephone=no" />
+    <link rel="stylesheet" href="../css/bootstrap-theme.css">
+    <link rel="stylesheet" href="../css/bootstrap.css">
+    <link rel="stylesheet" href="../css/my.css">
+    <script src="../js/bootstrap.js"></script>
+    <script src="../js/jquery.js"></script>
+    <script src="../js/my.js"></script>
+    <title>Title</title>
+    <script>
+        var userName ;
+        function end() {
+            var str=location.href; //取得整个地址栏
+            var arr = str.split("?");
+            userName = arr[1];
+            $.ajax({
+                type: "POST",
+                async: false,
+                url: "searchAll.do",
+                dataType: "json",
+                scriptCharset: 'GBK',
+                data: {
+                    "userName": userName
+                },
+                success: function (result) {
+                    var str = JSON.stringify(result);
+                    //alert(str);
+                    var json = JSON.parse(str);
+                    var n1=0;
+                    if(Object.keys(json).length>0){
+                        for(var n in json){
+                            $("#table1").eq(0).append(
+                                "<tr>" +
+                                "<td>"+"<input type='text'name='cid1' id='cid1"+n1+"' value='"+json[n].userName+"' readonly>"+"</td>" +
+                                "<td>"+"<input type='text'name='faren1' id='faren1"+n1+"' value='"+json[n].name+"'>"+"</td>" +
+                                "<td>"+"<input type='text'name='wangzhi1' id='wangzhi1"+n1+"' value='"+json[n].phone+"'>"+"</td>" +
+                                "<td>"+"<input type='text'name='chengjiao1' id='chengjiao1"+n1+"' value='"+json[n].qq+"'>"+"</td>" +
+                                "<td>"+"<input type='text'name='leixing1' id='leixing1"+n1+"' value='"+json[n].zhiwu+"'>"+"</td>" +
+                                "<td>"+"<input type='text'name='dizhi1' id='dizhi1"+n1+"' value='"+json[n].bumen+"'>"+"</td>" +
+                                "<td>"+"<input type='text'name='dianhua1' id='dianhua1"+n1+"' value='"+json[n].type+"'>"+"</td>" +
+                                "<td>"+"<input type='text'name='yixiang1' id='yixiang1"+n1+"' value='"+json[n].state+"'>"+"</td>" +
+                                "<td>"+"<input type='text'name='mingcheng1' id='mingcheng1"+n1+"' value='"+json[n].ctype+"'>"+"</td>" +
+                                "<td>"+"<button class='btn btn-success' onclick='save_new1("+n1+");'>保存</button>"+"</td>"+
+                                "<td>"+"<button class='btn btn-danger' onclick='delete2("+n1+");'>删除</button>"+"</td>"+
+                                "</tr>"
+                            );
+                            n1++;
+                        }
+                    }else {
+                        alert("没有数据");
+                    }
+                },
+                error: function () {
+                    alert("没有数据");
+                }
+            });
+
+        }
+        function save_new1(n) {
+            var cid1 = "#cid1"+n;
+            var cboss1 = "#faren1"+n;
+            var cwww1 = "#wangzhi1"+n;
+            var cover1 = "#chengjiao1"+n;
+            var ctype1 = "#leixing1"+n;
+            var caddress1 = "#dizhi1"+n;
+            var cphone1 = "#dianhua1"+n;
+            var yixiang1 = "#yixiang1"+n;
+            var cname1 = "#mingcheng1"+n;
+            var cid = $(cid1).eq(0).val();
+            //alert(cid);
+            //alert(cid);
+            var cboss = $(cboss1).eq(0).val();
+            var cwww = $(cwww1).eq(0).val();
+            var cover = $(cover1).eq(0).val();
+            //alert(cover);
+            var ctype = $(ctype1).eq(0).val();
+            var caddress = $(caddress1).eq(0).val();
+            var cphone = $(cphone1).eq(0).val();
+            var yixiang = $(yixiang1).eq(0).val();
+            var cname = $(cname1).eq(0).val();
+            //alert("test");
+            $.ajax({
+                type: "POST",
+                async: false,
+                url: "saveUser11.do",
+                dataType: "json",
+                scriptCharset: 'GBK',
+                data: {
+                    "userName": cid,
+                    "name": cboss,
+                    "phone": cwww,
+                    "qq": cover,
+                    "zhiwu": ctype,
+                    "bumen": caddress,
+                    "type": cphone,
+                    "state": yixiang,
+                    "ctype": cname
+                },
+                success: function (result) {
+                    var str = JSON.stringify(result);
+                    var json = JSON.parse(str);
+                    if(json.msg=="success"){
+                        alert("保存成功");
+                        location.reload(true);
+                    }else {
+                        alert("保存失败");
+                    }
+                },
+                error: function () {
+                    alert("没有数据");
+                }
+            });
+        }
+        function delete2(n) {
+            var id = "cid1"+n;
+            var user = document.getElementById(id).value;
+            $.ajax({
+                type: "POST",
+                async: false,
+                url: "deleteUser1.do",
+                dataType: "json",
+                scriptCharset: 'GBK',
+                data: {
+                    "user": user
+                },
+                success: function (result) {
+                    var str = JSON.stringify(result);
+                    //alert(str);
+                    var json = JSON.parse(str);
+                    alert(json.msg);
+                },
+                error: function () {
+                    alert("没有数据");
+                }
+            });
+        }
+        function my_message_click(i) {
+            var $s = $(".index_area").children();
+            for(var n=0;n<$s.length;n++){
+                $s.eq(n).attr("style","display: none");
+            }
+
+            $s.eq(i).attr("style","display: block");
+        }
+        function tianjia2() {
+            $("#my_center").eq(0).attr("style","display:none");
+            $("#my_set").eq(0).attr("style","display:block");
+        }
+        function save1() {
+            var username = $("#username").eq(0).val();
+            var name = $("#name").eq(0).val();
+            var phone = $("#phone").eq(0).val();
+            var qq = $("#qq").eq(0).val();
+            var zhiwu = $("#zhiwu").eq(0).val();
+            var bumen = $("#bumen").eq(0).val();
+            var type = $("#type").eq(0).val();
+            var  ctype = $("#ctype").eq(0).val();
+            $.ajax({
+                type: "POST",
+                async: false,
+                url: "saveSave1.do",
+                dataType: "json",
+                scriptCharset: 'GBK',
+                data: {
+                    "userName": username,
+                    "name": name,
+                    "phone": phone,
+                    "qq": qq,
+                    "bumen": bumen,
+                    "zhiwu": zhiwu,
+                    "ctype": ctype,
+                    "type": type
+                },
+                success: function (result) {
+                    var str = JSON.stringify(result);
+                    var json = JSON.parse(str);
+                    alert(json.msg);
+                    location.reload(true);
+                },
+                error: function () {
+                    alert("没有数据");
+                }
+            });
+        }
+    </script>
+    <style>
+        .index_area{
+            margin-top: -10.5%;
+            margin-left: 6%;
+            width: 1400px;
+            height: 650px;
+        }
+        .div5{
+            margin-top: 15%;
+            margin-left: 1%;
+        }
+    </style>
+</head>
+<body onload="end();">
+<div>
+    <div class="list-group">
+        <button onclick="my_message_click(0);" class="btn btn-primary">用户管理</button>
+        <p></p>
+        <button onclick="tianjia2();" class="btn btn-primary">添加用户</button>
+        <p></p>
+        <a href="downlog.do"><button class="btn btn-primary">下载系统日志</button></a>
+    </div>
+    <div class="index_area">
+        <div id="my_center" style="display: block" class="div5">
+            <table class="table table-hover table-bordered" id="table1">
+                <tr>
+                    <td>用户名</td>
+                    <td>姓名</td>
+                    <td>电话</td>
+                    <td>qq</td>
+                    <td>职务</td>
+                    <td>部门</td>
+                    <td>管理员(管理员为1)</td>
+                    <td>是否封禁(0为封禁)</td>
+                    <td>权限级别(最高为5)</td>
+                    <td>保存</td>
+                    <td>删除</td>
+                </tr>
+            </table>
+        </div>
+        <div id="my_set" style="display: none" class="div5">
+            <div class="form-group">
+                <label for="username">用户名</label>
+                <input type="text" class="form-control" id="username" name="username">
+            </div>
+            <div class="form-group">
+                <label for="name">姓名</label>
+                <input type="text" class="form-control" id="name" name="name">
+            </div>
+            <div class="form-group">
+                <label for="phone">手机号</label>
+                <input type="text" class="form-control" id="phone" name="phone">
+            </div>
+            <div class="form-group">
+                <label for="qq">qq号</label>
+                <input type="text" class="form-control" id="qq" name="qq">
+            </div>
+            <div class="form-group">
+                <label for="zhiwu">职务</label>
+                <input type="text" class="form-control" id="zhiwu" name="zhiwu">
+            </div>
+            <div class="form-group">
+                <label for="bumen">部门</label>
+                <input type="text" class="form-control" id="bumen" name="bumen">
+            </div>
+            <div class="form-group">
+                <label for="type">管理员账号?(1是)</label>
+                <input type="text" class="form-control" id="type" name="type">
+            </div>
+            <div class="form-group">
+                <label for="ctype">权限级别</label>
+                <input type="text" class="form-control" id="ctype" name="ctype">
+            </div>
+            <button type="button" class="btn btn-success" onclick="save1()" style="width: 100%">保存</button>
+        </div>
+    </div>
+</div>
+</body>
+</html>

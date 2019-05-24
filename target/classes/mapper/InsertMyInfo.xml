@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.demo.dao.InsertMyInfo">
+<!-- 查询所有用户数据 -->
+<update id="insertMyinfo"  parameterType="com.example.demo.entity.SelectInfo">
+        update admin set password=#{password},phone=#{phone},qq=#{qq},path=#{path} where userName=#{userName}
+    </update>
+<update id="insertMyinfo1"  parameterType="com.example.demo.entity.SelectInfo">
+        update users set password=#{password},phone=#{phone},qq=#{qq},path=#{path} where userName=#{userName}
+    </update>
+    <insert id="uploadFile" parameterType="com.example.demo.entity.FileInfo">
+        insert into hetong(cname,hname,guishu,path1,beizhu)
+        values (#{cname},#{hname},#{guishu},#{path1},#{beizhu})
+    </insert>
+    <insert id="insertEmail" parameterType="com.example.demo.entity.EmailInfo">
+        insert into email(recipient,title,text1,sender,fujian)
+        values (#{recipient},#{title},#{text1},#{sender},#{filePath})
+    </insert>
+</mapper>

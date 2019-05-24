@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="content-type" content="text/html;charset=utf-8"/>
+    <meta name="viewport" content="width=device-width,height=device-height,inital-scale=1.0,maximum-scale=1.0,user-scalable=no">
+    <meta content="yes" name="apple-mobile-web-app-capable">
+    <meta name="format-detection" content="telephone=no" />
+    <link rel="stylesheet" href="../css/bootstrap-theme.css">
+    <link rel="stylesheet" href="../css/bootstrap.css">
+    <link rel="stylesheet" href="../css/my.css">
+    <script src="../js/bootstrap.js"></script>
+    <script src="../js/jquery.js"></script>
+    <script src="../js/my.js"></script>
+    <title>admin_index</title>
+    <script>
+        var userName ;
+        function end() {
+            var str=location.href; //取得整个地址栏
+            var arr = str.split("?");
+            userName = arr[1];
+            //userName = document.getElementById("user").innerText = arr[1];
+            //alert(userName);
+            //selectInfo(userName);
+        }
+        function selectInfo1() {
+            //alert(userName);
+            $.ajax({
+                type: "POST",
+                async: false,
+                url: "selectInfo1.do",
+                dataType: "json",
+                scriptCharset: 'GBK',
+                data: {
+                    userName:userName
+                },
+                success: function (result) {
+                    var str = JSON.stringify(result);
+                    //alert(str);
+                    var json = JSON.parse(str);
+                    //var name = json.name;
+                    var name = json.name;
+                    var userName = json.userName;
+                    var zhiwu = json.zhiwu;
+                    var bumen = json.bumen;
+                    var phone = json.phone;
+                    var qq = json.qq;
+                    document.getElementById("zhiwu").innerText=zhiwu;
+                    document.getElementById("bumen").innerText=bumen;
+                    //document.getElementById("identity").innerText=userName;
+                    document.getElementById("username").value=userName;
+                    document.getElementById("name").value=name;
+                    document.getElementById("phone").value=phone;
+                    document.getElementById("qq").value=qq;
+                    //username name phone qq
+                    //alert(state);
+                },
+                error: function () {
+                    alert("系统出错了2");
+                }
+            });
+        }
+        function my_index_click() {
+            $("#my_center").eq(0).attr("style","display: none");
+            $("#my_index").eq(0).attr("style","display: block");
+        }
+        function my_center_click() {
+            $("#my_center").eq(0).attr("style","display: block");
+            $("#my_index").eq(0).attr("style","display: none");
+            selectInfo1();
+        }
+        function seeMes() {
+            window.location.href = "notice.html?"+userName;
+
+        }
+        function setH() {
+            window.location.href = "set.html?"+userName;
+        }
+        function seeUser() {
+            window.location.href = "user.html?"+userName;
+        }
+        function save() {
+            var type = "file";          //后台接收时需要的参数名称，自定义即可
+            var id = "file";            //即input的id，用来寻找值
+            var phone = document.getElementById("phone").value;
+            var qq = document.getElementById("qq").value;
+            var password = document.getElementById("password").value;
+            var repassword = document.getElementById("password1").value;
+            //alert("test");
+            //if(password!==repassword){
+               // alert("password error");
+                //return;
+            //}
+            var formData = new FormData();
+            formData.append(type, $("#"+id)[0].files[0]);    //生成一对表单属性
+            formData.append('userName',userName);
+            formData.append('phone',phone);
+            formData.append('qq',qq);
+            formData.append('password',password);
+            $.ajax({
+                type: "POST",           //因为是传输文件，所以必须是post
+                url: 'upload.do',         //对应的后台处理类的地址
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function (result) {
+                    var str = JSON.stringify(result);
+                    //alert(str);
+                    var json = JSON.parse(str);
+                    alert(json.msg);
+                    location.reload(true);
+                }
+            });
+        }
+    </script>
+    <style>
+        .index_area{
+            margin-top: -6%;
+            margin-left: 6%;
+            width: 1400px;
+            height: 650px;
+        }
+        .div1{
+            margin-top: 0.5%;
+        }
+        .div2{
+            margin-left: 80%;
+            margin-top: -4%;
+        }
+        .h{
+            color: green;
+        }
+        .div3{
+            margin-top: 0.5%;
+        }
+        .div3 .div4{
+            margin-top: -2%;
+            margin-left: 20%;
+        }
+        .div5:hover{
+            cursor: pointer;
+            color: green;
+        }
+        .div6{
+            margin-top: -16%;
+            margin-left: 35%;
+        }
+        .div7{
+            margin-top: -3%;
+            margin-left: 30%;
+        }
+        .div7:hover{
+            cursor: pointer;
+            color: green;
+        }
+        .div8{
+            margin-top:-10% ;
+            margin-left: 70%;
+        }
+        .div9{
+            margin-top: -7%;
+            margin-left: 40%;
+        }
+        .div9:hover{
+            cursor: pointer;
+            color: green;
+        }
+        .my_center{
+            margin-top: 4%;
+        }
+        .div_basic_info{
+            margin-top: 2%;
+        }
+        .circle_img{
+            width: 50px;
+            height: 50px;
+            margin-left: 20%;
+            margin-top: -4.7%;
+        }
+        .upload_head{
+            margin-top: -3.5%;
+            margin-left: 25%;
+        }
+        .upload_head:hover{
+            cursor: pointer;
+        }
+        .c1{
+            width: 50%;
+        }
+        .work_info{
+            margin-left: 60%;
+            margin-top: -40%;
+        }
+        .xiaochengxu{
+            width: 65%;
+            height: 65%;
+        }
+        .c3{
+            margin-left: 80%;
+            margin-top: -15%;
+        }
+    </style>
+</head>
+<body onload="end();">
+<div>
+    <div class="list-group">
+        <button onclick="my_index_click();" class="btn btn-primary">我的主页</button>
+        <p></p>
+        <button onclick="my_center_click();" class="btn btn-primary">个人中心</button>
+    </div>
+    <div class="index_area">
+        <div id="my_index" style="display: block">
+            <div class="div1">&nbsp&nbsp <h4 class="h">欢迎使用CRM系统</h4><p>有效提高企业80%+工作效率</p>
+            </div>
+            <div class="div2"><h4 class="h">服务商通知公告:</h4><h5 style="cursor: pointer">[更新公告]20190304CRM产品更新公告</h5>
+            </div>
+            <div class="div3">
+                <span><h3>通知/公告</h3></span>
+                <div class="div4 div5" onclick="seeMes();">查看全部</div>
+                <div>
+                    <div class="div5"><h4>公告1</h4></div>
+                    2019.4.15 22:10:20
+                </div>
+                <div>
+                    <div class="div5"><h4>公告2</h4></div>
+                    2019.3.19 17:10:25
+                </div>
+                <div>
+                    <div class="div5"><h4>公告3</h4></div>
+                    2019.5.28 18:17:55
+                </div>
+            </div>
+            <div class="div6">
+                <span><h3>目标计划</h3></span>
+                <div class="div7" onclick="setH();">查看全部</div>
+                <div>
+                    <div class="div5"><h4>我的目标</h4></div>
+
+                </div>
+                <div>
+                    <div class="div5"><h4>部门目标</h4></div>
+
+                </div>
+                <div>
+                    <div class="div5"><h4>公司目标</h4></div>
+
+                </div>
+            </div>
+            <div class="div8">
+                <span><h3>跟进客户</h3></span>
+                <div class="div9" onclick="seeUser();">查看全部</div>
+                <div>
+                    <div class="div5"><h4>客户1</h4></div>
+
+                </div>
+                <div>
+                    <div class="div5"><h4>客户2</h4></div>
+
+                </div>
+                <div>
+                    <div class="div5"><h4>客户3</h4></div>
+                </div>
+            </div>
+        </div>
+        <div id="my_center" style="display: none" class="my_center">
+            <div>
+                <h2 style="color: green">个人中心</h2>
+            </div>
+            <div class="div_basic_info">
+                <h3>基本信息</h3>
+                <div>
+                    <div class="form-group">
+                        <label>头像</label>
+                    </div>
+                    <img src="../images/unitop.jpg" alt="" class="img-circle circle_img">
+<!--                    //<form enctype="multipart/form-data">-->
+                        <label for="file">上传头像<input type="file" name="file" id="file"></label>
+                    <!--//</form>-->
+                    <div>
+                        <div class="form-group">
+                            <label for="password">用户名</label>
+                            <input type="text" class="form-control c1" id="username" name="username" readonly>
+                        </div>
+                        <div class="form-group">
+                            <label for="password">姓名</label>
+                            <input type="text" class="form-control c1" id="name" name="name" readonly>
+                        </div>
+                        <div class="form-group">
+                            <label for="password">手机号</label>
+                            <input type="text" class="form-control c1" id="phone" name="phone">
+                        </div>
+                        <div class="form-group">
+                            <label for="password">qq</label>
+                            <input type="text" class="form-control c1" id="qq" name="qq">
+                        </div>
+                        <div class="form-group">
+                            <label for="password">密码</label>
+                            <input type="password" class="form-control c1" id="password" name="password">
+                        </div>
+                        <div class="form-group">
+                            <label for="password">确认密码</label>
+                            <input type="password" class="form-control c1" id="password1" name="password1">
+                        </div>
+                        <button type="button" class="btn btn-success c1" onclick="save()">保存</button>
+                    </div>
+
+                </div>
+
+                <div class="work_info">
+                    <div>
+                        <p><h3>其他信息</h3></p>
+                        <p>部门&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp <span id="bumen">市场部</span></p>
+                        <p>职务&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp <span id="zhiwu">销售员,销售经理,销售专员</span></p>
+                    </div>
+                    <div >
+                        <img src="../images/xiaochengxu.jpg" alt="" class="xiaochengxu">
+                    </div>
+                    <div class="c3">
+                        <p>打开微信扫一扫</p>
+
+                        <p>或搜索小程序：<span style="color: red">在线云办公</span></p>
+
+                        <p>绑定CRM账号</p>
+
+                        <p>随时随地在线云办公</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+</body>
+</html>

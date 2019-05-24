@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.demo.dao.SaveAllUserDao">
+    <!-- 查询所有用户数据 -->
+    <update id="saveAllUser"  parameterType="com.example.demo.entity.SelectMyUsersInfo">
+        update custname set cboss=#{cboss},cwww=#{cwww},cover=#{cover},ctype=#{ctype},caddress=#{caddress},cphone=#{cphone},
+        yixiang=#{yixiang},cname=#{cname},ctellp=#{ctellp},cqq=#{cqq},cguishu=#{cguishu} where cid=#{cid};
+    </update>
+    <update id="saveUser11"  parameterType="com.example.demo.entity.UserInfo">
+        update users set name1=#{name1},phone=#{phone},qq=#{qq},ctype=#{ctype},atype=#{atype},zhiwu=#{zhiwu},bumen=#{bumen},
+        state=#{state} where userName=#{userName};
+    </update>
+    <delete id="deleteUser" parameterType="com.example.demo.entity.SelectMyUsersInfo">
+        delete from custname where cid=#{cid}
+    </delete>
+    <insert id="createUser" parameterType="com.example.demo.entity.SelectMyUsersInfo">
+        insert into custname(cboss,cwww,cover,ctype,caddress,cphone,yixiang,cname,ctellp,cqq,cguishu)
+        values
+        (#{cboss},#{cwww},#{cover},#{ctype},#{caddress},#{cphone},#{yixiang},#{cname},#{ctellp},#{cqq},#{cguishu})
+    </insert>
+    <insert id="saveMessage" parameterType="com.example.demo.entity.MessageInfo">
+        insert into message(mtitle,message,userName,createtime)
+        values
+        (#{mtitle},#{message},#{userName},#{createtime})
+    </insert>
+    <delete id="deleteUser1" parameterType="com.example.demo.entity.UserInfo">
+        delete from users where userName=#{userName}
+    </delete>
+    <insert id="saveSave1" parameterType="com.example.demo.entity.UserInfo">
+        insert into users(userName,password,name1,phone,qq,atype,ctype,zhiwu,bumen)
+        values
+        (#{userName},#{password},#{name},#{phone},#{qq},#{type},#{ctype},#{zhiwu},#{bumen})
+    </insert>
+    <delete id="delectDingdanByID" parameterType="com.example.demo.entity.DingdanInfo">
+        delete from dingdan where id=#{id}
+    </delete>
+    <update id="updateDingdanByID"  parameterType="com.example.demo.entity.DingdanInfo">
+        update  dingdan
+        <set>
+            <if test="money!=null and money!=''">
+                money=#{money},
+            </if>
+            <if test="beizhu!=null and beizhu!=''">
+                beizhu=#{beizhu},
+            </if>
+            <if test="updateTime!=null and updateTime!=''">
+                updateTime=#{updateTime},
+            </if>
+            <if test="state!=null and state!=''">
+                state=#{state}
+            </if>
+        </set>
+        where id=#{id}
+    </update>
+    <insert id="saveNewGoodType"  parameterType="com.example.demo.entity.TypeInfo">
+        insert into chanpin(goodType) values(#{goodType})
+    </insert>
+    <insert id="saveNewDingdan"  parameterType="com.example.demo.entity.DingdanInfo">
+        insert into dingdan(cname,goodType,createTime,updateTime,beizhu,createPerson,money)
+        values
+        (#{cname},#{goodType},#{createTime},#{updateTime},#{beizhu},#{createPerson},#{money})
+    </insert>
+</mapper>

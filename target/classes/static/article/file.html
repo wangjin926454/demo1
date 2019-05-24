@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="content-type" content="text/html;charset=utf-8"/>
+    <meta name="viewport" content="width=device-width,height=device-height,inital-scale=1.0,maximum-scale=1.0,user-scalable=no">
+    <meta content="yes" name="apple-mobile-web-app-capable">
+    <meta name="format-detection" content="telephone=no" />
+    <link rel="stylesheet" href="../css/bootstrap-theme.css">
+    <link rel="stylesheet" href="../css/bootstrap.css">
+    <link rel="stylesheet" href="../css/my.css">
+    <script src="../js/bootstrap.js"></script>
+    <script src="../js/jquery.js"></script>
+    <script src="../js/my.js"></script>
+    <title>Title</title>
+    <script>
+        var userName ;
+        function end() {
+            var str=location.href; //取得整个地址栏
+            var arr = str.split("?");
+            userName = arr[1];
+            //userName = document.getElementById("user").innerText = arr[1];
+            //alert(userName);
+            selectFile();
+        }
+        function down(n1) {
+            var id = "down1"+n1;
+            //alert(id);
+            var v = document.getElementById(id).value;
+            alert(v);
+            $.ajax({
+                type: "get",
+                async: false,
+                url: "download.do",
+                dataType: "json",
+                scriptCharset: 'GBK',
+                data: {
+                    "path1": v
+                },
+                success: function (result) {
+                    var str = JSON.stringify(result);
+                    var json = JSON.parse(str);
+                    alert(json.msg);
+                },
+                error: function () {
+                    alert("下载出错");
+                }
+            });
+        }
+        function selectFile() {
+            $.ajax({
+                type: "POST",
+                async: false,
+                url: "selectFile.do",
+                dataType: "json",
+                scriptCharset: 'GBK',
+                data: "",
+                success: function (result) {
+                    var str = JSON.stringify(result);
+                    //alert(str);
+                    var json = JSON.parse(str);
+                    var n1=0;
+                    if(Object.keys(json).length>0){
+                        for(var n in json){
+                            var path1  = json[n].path1;
+                            //alert(path1);
+                            $("#file_list").eq(0).append(
+                                "<tr>" +
+                                "<td>"+json[n].cname+"</td>"+
+                                "<td>"+json[n].hname+"</td>" +
+                                "<td>"+json[n].beizhu+"</td>" +
+                                "<td>"+json[n].guishu+"</td>" +
+                                "<td>"+"<a href='download.do/?path1="+path1+"'><button class='btn btn-success'id='down1"+n1+"' value='"+path1+"'>下载此合同</button></a>"+"</td>"+
+                                "</tr>"
+                            );
+                            n1++;
+                        }
+                    }else {
+                        alert("没有数据");
+                    }
+                },
+                error: function () {
+                    alert("没有数据");
+                }
+            });
+        }
+        function my_index_click() {
+            $("#my_index").eq(0).attr("style","display: block");
+            $("#create_file1").eq(0).attr("style","display:none")
+        }
+        function create_file() {
+            $("#create_file1").eq(0).attr("style","display:block")
+            $("#div2").eq(0).attr("style","display:none")
+        }
+        function save_hetong() {
+            var type = "file";          //后台接收时需要的参数名称，自定义即可
+            var id = "file";            //即input的id，用来寻找值
+            var cname = document.getElementById("company_boss").value;
+            var hname = document.getElementById("company_web").value;
+            var beizhu = document.getElementById("phone").value;
+            var guishu = userName;
+            var formData = new FormData();
+            formData.append(type, $("#"+id)[0].files[0]);    //生成一对表单属性
+            formData.append('cname',cname);
+            formData.append('hname',hname);
+            formData.append('beizhu',beizhu);
+            formData.append('guishu',guishu);
+            $.ajax({
+                type: "POST",           //因为是传输文件，所以必须是post
+                url: 'uploadHeTong.do',         //对应的后台处理类的地址
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function (result) {
+                    var str = JSON.stringify(result);
+                    //alert(str);
+                    var json = JSON.parse(str);
+                    if(json.msg=="success"){
+                        alert("保存成功");
+                        location.reload(true);
+                    }else{
+                        alert("保存失败");
+                    }
+                },
+                error: function () {
+                    alert("错误")
+                }
+            });
+        }
+    </script>
+    <style>
+        .index_area{
+            margin-top: -6%;
+            margin-left: 6%;
+            width: 1400px;
+            height: 650px;
+        }
+        .div1{
+            margin-top: 5%;
+            margin-left: 30%;
+        }
+        .div2{
+            margin-top: -34%;
+        }
+    </style>
+</head>
+<body onload="end();">
+<div>
+    <div class="list-group">
+        <button onclick="my_index_click();" class="btn btn-primary">客户合同</button>
+    </div>
+    <div class="index_area">
+        <div id="create_file" class="div1">
+            <button type="button" class="btn btn-success" onclick="create_file()">新建合同</button>
+        </div>
+        <div id="create_file1" style="display: none" class="div6">
+            <div class="form-group">
+                <label for="company_boss">客户</label>
+                <input type="text" class="form-control" id="company_boss" name="company_boss">
+            </div>
+            <div class="form-group">
+                <label for="company_web">合同名称</label>
+                <input type="text" class="form-control" id="company_web" name="company_web">
+            </div>
+            <div class="form-group">
+                <label for="file">附件</label>
+                <input type="file" class="form-control " id="file" name="file">
+            </div>
+            <div class="form-group">
+                <label for="phone">备注</label>
+                <input type="text" class="form-control" id="phone" name="phone">
+            </div>
+            <button type="button" class="btn btn-success" onclick="save_hetong()" style="width: 100%">保存</button>
+        </div>
+    </div>
+    <div id="div2" class="div2" style="display: block">
+        <table id="file_list" class="table table-hover table-bordered">
+            <tr>
+                <td>客户</td>
+                <td>合同名称</td>
+                <td>备注</td>
+                <td>合同签署人</td>
+                <td>下载此合同</td>
+            </tr>
+        </table>
+    </div>
+</div>
+</body>
+</html>

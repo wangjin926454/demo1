@@ -1,0 +1,748 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Title</title>
+    <meta http-equiv="content-type" content="text/html;charset=utf-8"/>
+    <meta name="viewport" content="width=device-width,height=device-height,inital-scale=1.0,maximum-scale=1.0,user-scalable=no">
+    <meta content="yes" name="apple-mobile-web-app-capable">
+    <meta name="format-detection" content="telephone=no" />
+    <link rel="stylesheet" href="../css/bootstrap-theme.css">
+    <link rel="stylesheet" href="../css/bootstrap.css">
+    <link rel="stylesheet" href="../css/my.css">
+    <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+    <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="../js/bootstrap.js"></script>
+    <script src="../js/jquery.js"></script>
+    <script src="../js/my.js"></script>
+    <script>
+        var userName ;
+        function end() {
+            var str=location.href; //取得整个地址栏
+            var arr = str.split("?");
+            //userName = document.getElementById("user").innerText = arr[1];
+            userName = arr[1];
+            //alert(userName);
+            selectMyUsers();
+            selectCountUsers();
+            selectAllUsers();
+        }
+
+        function selectAllUsers() {
+            $.ajax({
+                type: "POST",
+                async: false,
+                url: "selectAllUsersInfo1.do",
+                dataType: "json",
+                scriptCharset: 'GBK',
+                success: function (result) {
+                    var str = JSON.stringify(result);
+                    var json = JSON.parse(str);
+                    //console.log(json);
+                    var n1 = 0;
+                    for(var n in json){
+                        $("#table1").eq(0).append(
+                            "<tr>" +
+                                "<td>"+"<input type='text'name='cid' id='cid"+n1+"' value='"+json[n].cid+"' readonly>"+"</td>" +
+                                "<td>"+"<input type='text'name='faren' id='faren"+n1+"' value='"+json[n].cboss+"'>"+"</td>" +
+                                "<td>"+"<input type='text'name='wangzhi' id='wangzhi"+n1+"' value='"+json[n].cwww+"'>"+"</td>" +
+                                "<td>"+"<input type='text'name='chengjiao' id='chengjiao"+n1+"' value='"+json[n].cover+"'>"+"</td>" +
+                                "<td>"+"<input type='text'name='leixing' id='leixing"+n1+"' value='"+json[n].ctype+"'>"+"</td>" +
+                                "<td>"+"<input type='text'name='dizhi' id='dizhi"+n1+"' value='"+json[n].caddress+"'>"+"</td>" +
+                                "<td>"+"<input type='text'name='dianhua' id='dianhua"+n1+"' value='"+json[n].cphone+"'>"+"</td>" +
+                                "<td>"+"<input type='text'name='yixiang' id='yixiang"+n1+"' value='"+json[n].yixiang+"'>"+"</td>" +
+                                "<td>"+"<input type='text'name='mingcheng' id='mingcheng"+n1+"' value='"+json[n].cname+"'>"+"</td>" +
+                                "<td>"+"<input type='text'name='shouji' id='shouji"+n1+"' value='"+json[n].ctellp+"'>"+"</td>" +
+                                "<td>"+"<input type='text'name='qq' id='qq"+n1+"' value='"+json[n].cqq+"'>"+"</td>" +
+                                "<td>"+"<input type='text'name='gusihu' id='gusihu"+n1+"' value='"+json[n].cguishu+"'>"+"</td>" +
+                                "<td>"+"<button class='btn btn-success' onclick='save_new("+n1+");'>保存</button>"+"</td>"+
+                                "<td>"+"<button class='btn btn-danger' onclick='delete1("+n1+");'>删除</button>"+"</td>"+
+                            "</tr>"
+                        );
+                        n1++;
+                    }
+                },
+                error: function () {
+                    alert("没有数据");
+                }
+            });
+        }
+        function save_new(n) {
+            //alert(n);
+            var cid1 = "#cid"+n;
+            var cboss1 = "#faren"+n;
+            var cwww1 = "#wangzhi"+n;
+            var cover1 = "#chengjiao"+n;
+            var ctype1 = "#leixing"+n;
+            var caddress1 = "#dizhi"+n;
+            var cphone1 = "#dianhua"+n;
+            var yixiang1 = "#yixiang"+n;
+            var cname1 = "#mingcheng"+n;
+            var ctellp1 = "#shouji"+n;
+            var cqq1 = "#qq"+n;
+            var cguishu1 = "#gusihu"+n;
+            var cid = $(cid1).eq(0).val();
+            var cboss = $(cboss1).eq(0).val();
+            var cwww = $(cwww1).eq(0).val();
+            var cover = $(cover1).eq(0).val();
+            var ctype = $(ctype1).eq(0).val();
+            var caddress = $(caddress1).eq(0).val();
+            var cphone = $(cphone1).eq(0).val();
+            var yixiang = $(yixiang1).eq(0).val();
+            var cname = $(cname1).eq(0).val();
+            var ctellp = $(ctellp1).eq(0).val();
+            var cqq = $(cqq1).eq(0).val();
+            var cguishu = $(cguishu1).eq(0).val();
+            $.ajax({
+                type: "POST",
+                async: false,
+                url: "saveAllUserInfo.do",
+                dataType: "json",
+                scriptCharset: 'GBK',
+                data: {
+                    "cid": cid,
+                    "cboss": cboss,
+                    "cwww": cwww,
+                    "cover": cover,
+                    "ctype": ctype,
+                    "caddress": caddress,
+                    "cphone": cphone,
+                    "yixiang": yixiang,
+                    "cname": cname,
+                    "ctellp": ctellp,
+                    "cqq": cqq,
+                    "cguishu": cguishu
+                },
+                success: function (result) {
+                    var str = JSON.stringify(result);
+                    var json = JSON.parse(str);
+                    if(json.msg=="success"){
+                        alert("保存成功");
+                        location.reload(true);
+                    }else {
+                        alert("保存失败");
+                    }
+                },
+                error: function () {
+                    alert("没有数据");
+                }
+            });
+        }
+        function delete1(n) {
+            //alert("确定删除吗?");
+            var cid1 = "#cid"+n;
+            var cid = $(cid1).eq(0).val();
+            $.ajax({
+                type: "POST",
+                async: false,
+                url: "delete.do",
+                dataType: "json",
+                scriptCharset: 'GBK',
+                data: {
+                   "cid": cid
+                },
+                success: function (result) {
+                    var str = JSON.stringify(result);
+                    var json = JSON.parse(str);
+                    if(json.msg=="success"){
+                        alert("删除成功");
+                        location.reload(true);
+                    }else {
+                        alert("删除失败");
+                    }
+                },
+                error: function () {
+                    alert("没有数据");
+                }
+            });
+
+        }
+        function save_new1(n) {
+            var cid1 = "#cid1"+n;
+            var cboss1 = "#faren1"+n;
+            var cwww1 = "#wangzhi1"+n;
+            var cover1 = "#chengjiao1"+n;
+            var ctype1 = "#leixing1"+n;
+            var caddress1 = "#dizhi1"+n;
+            var cphone1 = "#dianhua1"+n;
+            var yixiang1 = "#yixiang1"+n;
+            var cname1 = "#mingcheng1"+n;
+            var ctellp1 = "#shouji1"+n;
+            var cqq1 = "#qq1"+n;
+            var cguishu1 = "#gusihu1"+n;
+            var cid = $(cid1).eq(0).val();
+            var cboss = $(cboss1).eq(0).val();
+            var cwww = $(cwww1).eq(0).val();
+            var cover = $(cover1).eq(0).val();
+            var ctype = $(ctype1).eq(0).val();
+            var caddress = $(caddress1).eq(0).val();
+            var cphone = $(cphone1).eq(0).val();
+            var yixiang = $(yixiang1).eq(0).val();
+            var cname = $(cname1).eq(0).val();
+            var ctellp = $(ctellp1).eq(0).val();
+            var cqq = $(cqq1).eq(0).val();
+            var cguishu = $(cguishu1).eq(0).val();
+            //alert("test");
+            $.ajax({
+                type: "POST",
+                async: false,
+                url: "saveAllUserInfo.do",
+                dataType: "json",
+                scriptCharset: 'GBK',
+                data: {
+                    "cid": cid,
+                    "cboss": cboss,
+                    "cwww": cwww,
+                    "cover": cover,
+                    "ctype": ctype,
+                    "caddress": caddress,
+                    "cphone": cphone,
+                    "yixiang": yixiang,
+                    "cname": cname,
+                    "ctellp": ctellp,
+                    "cqq": cqq,
+                    "cguishu": cguishu
+                },
+                success: function (result) {
+                    var str = JSON.stringify(result);
+                    var json = JSON.parse(str);
+                    if(json.msg=="success"){
+                        alert("保存成功");
+                        location.reload(true);
+                    }else {
+                        alert("保存失败");
+                    }
+                },
+                error: function () {
+                    alert("没有数据");
+                }
+            });
+        }
+        function save_new2(n) {
+            var cid1 = "#cid2"+n;
+            var cboss1 = "#faren2"+n;
+            var cwww1 = "#wangzhi2"+n;
+            var cover1 = "#chengjiao2"+n;
+            var ctype1 = "#leixing2"+n;
+            var caddress1 = "#dizhi2"+n;
+            var cphone1 = "#dianhua2"+n;
+            var yixiang1 = "#yixiang2"+n;
+            var cname1 = "#mingcheng2"+n;
+            var ctellp1 = "#shouji2"+n;
+            var cqq1 = "#qq2"+n;
+            var cguishu1 = "#gusihu2"+n;
+            var cid = $(cid1).eq(0).val();
+            var cboss = $(cboss1).eq(0).val();
+            var cwww = $(cwww1).eq(0).val();
+            var cover = $(cover1).eq(0).val();
+            var ctype = $(ctype1).eq(0).val();
+            var caddress = $(caddress1).eq(0).val();
+            var cphone = $(cphone1).eq(0).val();
+            var yixiang = $(yixiang1).eq(0).val();
+            var cname = $(cname1).eq(0).val();
+            var ctellp = $(ctellp1).eq(0).val();
+            var cqq = $(cqq1).eq(0).val();
+            var cguishu = $(cguishu1).eq(0).val();
+            //alert("test");
+            $.ajax({
+                type: "POST",
+                async: false,
+                url: "saveAllUserInfo.do",
+                dataType: "json",
+                scriptCharset: 'GBK',
+                data: {
+                    "cid": cid,
+                    "cboss": cboss,
+                    "cwww": cwww,
+                    "cover": cover,
+                    "ctype": ctype,
+                    "caddress": caddress,
+                    "cphone": cphone,
+                    "yixiang": yixiang,
+                    "cname": cname,
+                    "ctellp": ctellp,
+                    "cqq": cqq,
+                    "cguishu": cguishu
+                },
+                success: function (result) {
+                    var str = JSON.stringify(result);
+                    var json = JSON.parse(str);
+                    if(json.msg=="success"){
+                        alert("保存成功");
+                        location.reload(true);
+                    }else {
+                        alert("保存失败");
+                    }
+                },
+                error: function () {
+                    alert("没有数据");
+                }
+            });
+        }
+        function delete2(n) {
+            var cid1 = "#cid1"+n;
+            var cid = $(cid1).eq(0).val();
+            $.ajax({
+                type: "POST",
+                async: false,
+                url: "delete.do",
+                dataType: "json",
+                scriptCharset: 'GBK',
+                data: {
+                    "cid": cid
+                },
+                success: function (result) {
+                    var str = JSON.stringify(result);
+                    var json = JSON.parse(str);
+                    if(json.msg=="success"){
+                        alert("删除成功");
+                        location.reload(true);
+                    }else {
+                        alert("删除失败");
+                    }
+                },
+                error: function () {
+                    alert("没有数据");
+                }
+            });
+        }
+        function delete3(n) {
+            var cid1 = "#cid2"+n;
+            var cid = $(cid1).eq(0).val();
+            $.ajax({
+                type: "POST",
+                async: false,
+                url: "delete.do",
+                dataType: "json",
+                scriptCharset: 'GBK',
+                data: {
+                    "cid": cid
+                },
+                success: function (result) {
+                    var str = JSON.stringify(result);
+                    var json = JSON.parse(str);
+                    if(json.msg=="success"){
+                        alert("删除成功");
+                        location.reload(true);
+                    }else {
+                        alert("删除失败");
+                    }
+                },
+                error: function () {
+                    alert("没有数据");
+                }
+            });
+        }
+        function selectCountUsers() {
+            $.ajax({
+                type: "POST",
+                async: false,
+                url: "selectAllUsersInfo.do",
+                dataType: "json",
+                scriptCharset: 'GBK',
+                data: {
+                    userName:userName
+                },
+                success: function (result) {
+                    var str = JSON.stringify(result);
+                    //alert(str);
+                    var json = JSON.parse(str);
+                    var countTotal = json.countTotal;
+                    //alert(countTotal);
+                    //$("#total_cust").eq(0).val=countTotal;
+                    document.getElementById("total_cust").innerText=countTotal;
+                    //alert(json.length-countTotal);
+                },
+                error: function () {
+                    alert("没有数据");
+                }
+            });
+        }
+        var json1;
+        function selectMyUsers() {
+            //alert("test");
+            $.ajax({
+                type: "POST",
+                async: false,
+                url: "selectMyUsersInfo.do",
+                dataType: "json",
+                scriptCharset: 'GBK',
+                data: {
+                    userName:userName
+                },
+                success: function (result) {
+                    var str = JSON.stringify(result);
+                    //alert(str);
+                    var json = JSON.parse(str);
+                    json1 = json;
+                    var count = Object.keys(json).length;
+                    //alert(count);
+                    document.getElementById("my_cust").innerText=count;
+                },
+                error: function () {
+                    alert("没有数据");
+                }
+            });
+        }
+        function my_index_click() {
+            $("#my_center").eq(0).attr("style","display: none");
+            $("#my_index").eq(0).attr("style","display: block");
+            $("#div1").eq(0).attr("style","display:block");
+            $("#tianjia2").eq(0).attr("style","display:none");
+            $("#search1").eq(0).attr("style","display: none");
+        }
+        function my_center_click() {
+            $("#my_center").eq(0).attr("style","display: block");
+            $("#my_index").eq(0).attr("style","display: none");
+            $("#div2").eq(0).attr("style","display:block");
+            $("#tianjia2").eq(0).attr("style","display:none");
+            $("#search1").eq(0).attr("style","display: none");
+            $("#table3  tr:not(:first)").empty("");
+            $.ajax({
+                type: "POST",
+                async: false,
+                url: "selectMyUsersInfo.do",
+                dataType: "json",
+                scriptCharset: 'GBK',
+                data: {
+                    userName:userName
+                },
+                success: function (result) {
+                    var str = JSON.stringify(result);
+                    //alert(str);
+                    var json = JSON.parse(str);
+                    var n2=0;
+                    for(var n in json){
+                        $("#table3").eq(0).append(
+                            "<tr>" +
+                            "<td>"+"<input type='text'name='cid2' id='cid2"+n2+"' value='"+json[n].cid+"' readonly>"+"</td>" +
+                            "<td>"+"<input type='text'name='faren2' id='faren2"+n2+"' value='"+json[n].cboss+"'>"+"</td>" +
+                            "<td>"+"<input type='text'name='wangzhi2' id='wangzhi2"+n2+"' value='"+json[n].cwww+"'>"+"</td>" +
+                            "<td>"+"<input type='text'name='chengjiao2' id='chengjiao2"+n2+"' value='"+json[n].cover+"'>"+"</td>" +
+                            "<td>"+"<input type='text'name='leixing2' id='leixing2"+n2+"' value='"+json[n].ctype+"'>"+"</td>" +
+                            "<td>"+"<input type='text'name='dizhi2' id='dizhi2"+n2+"' value='"+json[n].caddress+"'>"+"</td>" +
+                            "<td>"+"<input type='text'name='dianhua2' id='dianhua2"+n2+"' value='"+json[n].cphone+"'>"+"</td>" +
+                            "<td>"+"<input type='text'name='yixiang2' id='yixiang2"+n2+"' value='"+json[n].yixiang+"'>"+"</td>" +
+                            "<td>"+"<input type='text'name='mingcheng2' id='mingcheng2"+n2+"' value='"+json[n].cname+"'>"+"</td>" +
+                            "<td>"+"<input type='text'name='shouji2' id='shouji2"+n2+"' value='"+json[n].ctellp+"'>"+"</td>" +
+                            "<td>"+"<input type='text'name='qq2' id='qq2"+n2+"' value='"+json[n].cqq+"'>"+"</td>" +
+                            "<td>"+"<input type='text'name='gusihu2' id='gusihu2"+n2+"' value='"+json[n].cguishu+"'>"+"</td>" +
+                            "<td>"+"<button class='btn btn-success' onclick='save_new2("+n2+");'>保存</button>"+"</td>"+
+                            "<td>"+"<button class='btn btn-danger' onclick='delete3("+n2+");'>删除</button>"+"</td>"+
+                            "</tr>"
+                        );
+                        n2++;
+                    }
+                },
+                error: function () {
+                    alert("没有数据");
+                }
+            });
+
+        }
+       $(document).ready(function () {
+           var s = location.href;
+           var str = s.split("?");
+           var txt = str[1];
+           //alert(txt);
+           document.getElementById("test").innerText=txt;
+           //document.getElementById("test").innerHTML=txt;
+       });
+        function daoru() {
+
+        }
+        function daochu() {
+
+        }
+        function tianjia1() {
+            $("#my_center").eq(0).attr("style","display:none");
+            $("#my_index").eq(0).attr("style","display:none");
+            $("#search1").eq(0).attr("style","display:none");
+            $("#tianjia2").eq(0).attr("style","display:block");
+        }
+        function tianjia2() {
+            $("#div2").eq(0).attr("style","display:none");
+            $("#tianjia2").eq(0).attr("style","display:block")
+        }
+        function save1() {
+            var cname = $("#company_name").eq(0).val();
+            var cboss = $("#company_boss").eq(0).val();
+
+            var cwww = $("#company_web").eq(0).val();
+            var ctype = $("#company_type").eq(0).val();
+            var caddress = $("#address").eq(0).val();
+            var cphone = $("#company_phone").eq(0).val();
+            var ctellp = $("#phone").eq(0).val();
+            var cover = $("#cover").eq(0).val();
+            var cqq = $("#qq").eq(0).val();
+            var yixiang = $('input:radio:checked').val();
+            var cguishu = userName;
+            $.ajax({
+                type: "POST",
+                async: false,
+                url: "createUser.do",
+                dataType: "json",
+                scriptCharset: 'GBK',
+                data: {
+                    "cboss": cboss,
+                    "cwww": cwww,
+                    "cover": cover,
+                    "ctype": ctype,
+                    "caddress": caddress,
+                    "cphone": cphone,
+                    "yixiang": yixiang,
+                    "cname": cname,
+                    "ctellp": ctellp,
+                    "cqq": cqq,
+                    "cguishu": cguishu
+                },
+                success: function (result) {
+                    var str = JSON.stringify(result);
+                    var json = JSON.parse(str);
+                    if(json.msg=="success"){
+                        alert("添加成功");
+                        location.reload(true);
+                    }else {
+                        alert("添加失败");
+                    }
+                },
+                error: function () {
+                    alert("没有数据");
+                }
+            });
+        }
+        function search1() {
+            //防止重复追加。除了首个tr全部清空
+            $("#table2  tr:not(:first)").empty("");
+            $("#my_center").eq(0).attr("style","display: none");
+            $("#my_index").eq(0).attr("style","display: none");
+            $("#search1").eq(0).attr("style","display: block");
+            var cover = $("#search_transaction").val();
+            var yixiang = $("#want_state").val();
+            var info = $("#info").val();
+            //alert(yixiang);
+            $.ajax({
+                type: "POST",
+                async: false,
+                url: "searchUser.do",
+                dataType: "json",
+                scriptCharset: 'GBK',
+                data: {
+                    //userName:userName
+                    "cover": cover,
+                    "yixiang": yixiang,
+                    "info": info
+                },
+                success: function (result) {
+                    var str = JSON.stringify(result);
+                    //alert(str);
+                    var json = JSON.parse(str);
+                    var n1=0;
+                    if(Object.keys(json).length>0){
+                        for(var n in json){
+                            $("#table2").eq(0).append(
+                                "<tr>" +
+                                "<td>"+"<input type='text'name='cid1' id='cid1"+n1+"' value='"+json[n].cid+"' readonly>"+"</td>" +
+                                "<td>"+"<input type='text'name='faren1' id='faren1"+n1+"' value='"+json[n].cboss+"'>"+"</td>" +
+                                "<td>"+"<input type='text'name='wangzhi1' id='wangzhi1"+n1+"' value='"+json[n].cwww+"'>"+"</td>" +
+                                "<td>"+"<input type='text'name='chengjiao1' id='chengjiao1"+n1+"' value='"+json[n].cover+"'>"+"</td>" +
+                                "<td>"+"<input type='text'name='leixing1' id='leixing1"+n1+"' value='"+json[n].ctype+"'>"+"</td>" +
+                                "<td>"+"<input type='text'name='dizhi1' id='dizhi1"+n1+"' value='"+json[n].caddress+"'>"+"</td>" +
+                                "<td>"+"<input type='text'name='dianhua1' id='dianhua1"+n1+"' value='"+json[n].cphone+"'>"+"</td>" +
+                                "<td>"+"<input type='text'name='yixiang1' id='yixiang1"+n1+"' value='"+json[n].yixiang+"'>"+"</td>" +
+                                "<td>"+"<input type='text'name='mingcheng1' id='mingcheng1"+n1+"' value='"+json[n].cname+"'>"+"</td>" +
+                                "<td>"+"<input type='text'name='shouji1' id='shouji1"+n1+"' value='"+json[n].ctellp+"'>"+"</td>" +
+                                "<td>"+"<input type='text'name='qq1' id='qq1"+n1+"' value='"+json[n].cqq+"'>"+"</td>" +
+                                "<td>"+"<input type='text'name='gusihu1' id='gusihu1"+n1+"' value='"+json[n].cguishu+"'>"+"</td>" +
+                                "<td>"+"<button class='btn btn-success' onclick='save_new1("+n1+");'>保存</button>"+"</td>"+
+                                "<td>"+"<button class='btn btn-danger' onclick='delete2("+n1+");'>删除</button>"+"</td>"+
+                                "</tr>"
+                            );
+                            n1++;
+                        }
+                    }else {
+                        alert("没有数据");
+                    }
+                },
+                error: function () {
+                    alert("没有数据");
+                }
+            });
+        }
+    </script>
+    <style>
+        .index_area{
+            margin-top: -0.1%;
+            margin-left: 6%;
+            width: 1400px;
+            height: 650px;
+        }
+        .div1{
+            margin-left: 50%;
+            margin-top: -1%;
+        }
+        .div2{
+            margin-left: 20%;
+        }
+        .div3{
+            margin-left: 80%;
+            margin-top: -1.5%;
+        }
+        .c1:hover{
+            cursor: pointer;
+        }
+        .div4{
+            margin-top: -1.5%;
+            margin-left: 5%;
+        }
+        .div5{
+            margin-left: 5%;
+        }
+        .div6{
+            margin-top: 2%;
+            width: 50%;
+        }
+    </style>
+</head>
+<body onload="end();">
+<div>
+    <div class="list-group">
+        <button onclick="my_index_click();" class="btn btn-primary">客户列表</button>
+        <p></p>
+        <button onclick="my_center_click();" class="btn btn-primary">我的客户</button>
+        <div class="div1">
+            <span >总客户数: <span style="color: orangered" id="total_cust" >75</span></span><span class="div2" >我的客户数: <span style="color: orangered" id="my_cust">30</span></span>
+        </div>
+        <div id="div1" style="display: block">
+            <div class="div4">
+                <select name="search_transaction" id="search_transaction">
+                    <option value="0">搜索成交</option>
+                    <option value="1">已成交</option>
+                    <option value="2">未成交</option>
+                </select>
+                <select name="want_state" id="want_state" class="div5">
+                    <option value="0">意向状态</option>
+                    <option value="1">意向强烈</option>
+                    <option value="2">意向一般</option>
+                    <option value="3">已合作</option>
+                    <option value="4">意向无</option>
+                </select>
+                <input type="text" name="info" id="info" placeholder="请输入关键字" class="div5">
+                <button class="btn-success" onclick="search1();">搜索</button>
+            </div>
+        </div>
+        <div class="div3">
+            <button type="button" class="btn btn-success c1" onclick="tianjia1()">添加新客户</button>
+        </div>
+    </div>
+    <div class="index_area">
+        <div id="my_index" style="display: block">
+            <table class="table table-hover table-bordered" id="table1">
+                <tr>
+                    <td>客户id</td>
+                    <td>客户法人</td>
+                    <td>客户网址</td>
+                    <td>是否成交</td>
+                    <td>客户类型</td>
+                    <td>客户地址</td>
+                    <td>客户电话</td>
+                    <td>成交意向</td>
+                    <td>客户名称</td>
+                    <td>公司手机号</td>
+                    <td>QQ号</td>
+                    <td>客户归属人</td>
+                    <td>保存</td>
+                    <td>删除</td>
+                </tr>
+            </table>
+        </div>
+        <div id="my_center" style="display: none">
+            <table class="table table-hover table-bordered" id="table3">
+                <tr>
+                    <td>客户id</td>
+                    <td>客户法人</td>
+                    <td>客户网址</td>
+                    <td>是否成交</td>
+                    <td>客户类型</td>
+                    <td>客户地址</td>
+                    <td>客户电话</td>
+                    <td>成交意向</td>
+                    <td>客户名称</td>
+                    <td>公司手机号</td>
+                    <td>QQ号</td>
+                    <td>客户归属人</td>
+                    <td>保存</td>
+                    <td>删除</td>
+                </tr>
+            </table>
+        </div>
+        <div id="search1" style="display: none">
+            <table class="table table-hover table-bordered" id="table2">
+                <tr>
+                    <td>客户id</td>
+                    <td>客户法人</td>
+                    <td>客户网址</td>
+                    <td>是否成交</td>
+                    <td>客户类型</td>
+                    <td>客户地址</td>
+                    <td>客户电话</td>
+                    <td>成交意向</td>
+                    <td>客户名称</td>
+                    <td>公司手机号</td>
+                    <td>QQ号</td>
+                    <td>客户归属人</td>
+                    <td>保存</td>
+                    <td>删除</td>
+                </tr>
+            </table>
+        </div>
+        <div id="tianjia2" style="display: none" class="div6">
+            <div class="form-group">
+                <label for="company_name">公司名称</label>
+                <input type="text" class="form-control" id="company_name" name="company_name">
+            </div>
+            <div class="form-group">
+                <label for="company_boss">公司法人</label>
+                <input type="text" class="form-control" id="company_boss" name="company_boss">
+            </div>
+            <div class="form-group">
+                <label for="company_web">公司网址</label>
+                <input type="text" class="form-control" id="company_web" name="company_web">
+            </div>
+            <div class="form-group">
+                <label for="company_type">行业</label>
+                <input type="text" class="form-control" id="company_type" name="company_type">
+            </div>
+            <div class="form-group">
+                <label for="address">地址</label>
+                <input type="text" class="form-control" id="address" name="address">
+            </div>
+            <div class="form-group">
+                <label for="company_phone">公司电话</label>
+                <input type="text" class="form-control" id="company_phone" name="company_phone">
+            </div>
+            <div class="form-group">
+                <label for="company_phone">是否成交</label>
+                <input type="text" class="form-control" id="cover" name="cover">
+            </div>
+            <div class="form-group">
+                <label>意向</label>
+                <label for="yixiang1">意向强烈</label><input type="radio" name="yixiang" id="yixiang1" value="1">
+                <label for="yixiang2">意向一般</label><input type="radio" name="yixiang" id="yixiang2" value="2">
+                <label for="yixiang3">已成交</label><input type="radio" name="yixiang" id="yixiang3" value="3">
+                <label for="yixiang4">意向无</label><input type="radio" name="yixiang" id="yixiang4" value="4">
+            </div>
+            <div class="form-group">
+                <label for="phone">手机号</label>
+                <input type="text" class="form-control" id="phone" name="phone">
+            </div>
+            <div class="form-group">
+                <label for="qq">qq</label>
+                <input type="text" class="form-control" id="qq" name="qq">
+            </div>
+            <button type="button" class="btn btn-success" onclick="save1()" style="width: 100%">保存</button>
+        </div>
+    </div>
+</div>
+</body>
+</html>

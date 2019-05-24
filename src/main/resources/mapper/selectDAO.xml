@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.demo.dao.SelectInfoDao">
+    <!-- 查询所有用户数据 -->
+    <select id="selectInfo"  parameterType="com.example.demo.entity.SelectInfo" resultMap="selectInfo">
+        select  * from admin where userName=#{userName}
+    </select>
+    <resultMap id="selectInfo" type="com.example.demo.entity.SelectInfo">
+        <result column="userName" property="userName"/>
+        <result column="name" property="name"/>
+        <result column="phone" property="phone"/>
+        <result column="qq" property="qq"/>
+        <result column="zhiwu" property="zhiwu"/>
+        <result column="bumen" property="bumen"/>
+        <result column="type" property="type"/>
+        <result column="state" property="state"/>
+        <result column="ctype" property="ctype"/>
+        <result column="path" property="path"/>
+    </resultMap>
+    <select id="selectInfo1"  parameterType="com.example.demo.entity.SelectInfo" resultMap="selectInfo">
+        select  * from users where userName=#{userName}
+    </select>
+    <select id="selectFile"  parameterType="com.example.demo.entity.FileInfo" resultMap="selectFileInfo">
+        select  * from hetong
+    </select>
+    <resultMap id="selectFileInfo" type="com.example.demo.entity.FileInfo">
+        <result column="hid" property="hid"/>
+        <result column="cname" property="cname"/>
+        <result column="hname" property="hname"/>
+        <result column="guishu" property="guishu"/>
+        <result column="beizhu" property="beizhu"/>
+        <result column="path1" property="path1"/>
+    </resultMap>
+    <select id="selectMessage"  parameterType="com.example.demo.entity.MessageInfo" resultMap="MessageInfo">
+        select  * from message
+    </select>
+    <resultMap id="MessageInfo" type="com.example.demo.entity.MessageInfo">
+        <result column="mid" property="mid"/>
+        <result column="message" property="message"/>
+        <result column="userName" property="userName"/>
+        <result column="mtitle" property="mtitle"/>
+        <result column="createtime" property="createtime"/>
+    </resultMap>
+    <select id="selectEmailByID"  parameterType="com.example.demo.entity.EmailInfo" resultMap="MessageInfo1">
+        select  * from email where id=#{id}
+    </select>
+    <resultMap id="MessageInfo1" type="com.example.demo.entity.EmailInfo">
+        <result column="id" property="id"/>
+        <result column="recipient" property="recipient"/>
+        <result column="title" property="title"/>
+        <result column="text1" property="text1"/>
+        <result column="sender" property="sender"/>
+        <result column="fujian" property="filePath"/>
+    </resultMap>
+    <select id="selectAllDingdan"  parameterType="com.example.demo.entity.DingdanInfo" resultMap="dingdan">
+        select  * from dingdan
+    </select>
+    <resultMap id="dingdan" type="com.example.demo.entity.DingdanInfo">
+        <result column="id" property="id"/>
+        <result column="cname" property="cname"/>
+        <result column="goodType" property="createTime"/>
+        <result column="updateTime" property="updateTime"/>
+        <result column="beizhu" property="beizhu"/>
+        <result column="state" property="state"/>
+        <result column="createPerson" property="createPerson"/>
+        <result column="money" property="money"/>
+    </resultMap>
+    <select id="selectGoodsType"  parameterType="com.example.demo.entity.TypeInfo" resultMap="goodType">
+        select  goodType from chanpin
+    </select>
+    <resultMap id="goodType" type="com.example.demo.entity.TypeInfo">
+        <result column="goodType" property="goodType"/>
+    </resultMap>
+    <select id="selectCname"  parameterType="com.example.demo.entity.TypeInfo" resultMap="goodType1">
+        select  cname from custname
+    </select>
+    <resultMap id="goodType1" type="com.example.demo.entity.TypeInfo">
+        <result column="cname" property="cname"/>
+    </resultMap>
+    <select id="selectDingdanInfoByID"  parameterType="com.example.demo.entity.DingdanInfo" resultMap="selectDingdanInfo1">
+        select  * from dingdan where id=#{id}
+    </select>
+    <resultMap id="selectDingdanInfo1" type="com.example.demo.entity.DingdanInfo">
+        <result column="id" property="id"/>
+        <result column="cname" property="cname"/>
+        <result column="goodType" property="goodType"/>
+        <result column="updateTime" property="updateTime"/>
+        <result column="createTime" property="createTime"/>
+        <result column="beizhu" property="beizhu"/>
+        <result column="state" property="state"/>
+        <result column="createPerson" property="createPerson"/>
+        <result column="money" property="money"/>
+    </resultMap>
+    <select id="selectMyDingdan"  parameterType="com.example.demo.entity.DingdanInfo" resultMap="selectDingdanInfo2">
+        select  * from dingdan where createPerson=#{createPerson}
+    </select>
+    <resultMap id="selectDingdanInfo2" type="com.example.demo.entity.DingdanInfo">
+        <result column="id" property="id"/>
+        <result column="cname" property="cname"/>
+        <result column="goodType" property="goodType"/>
+        <result column="updateTime" property="updateTime"/>
+        <result column="createTime" property="createTime"/>
+        <result column="beizhu" property="beizhu"/>
+        <result column="state" property="state"/>
+        <result column="createPerson" property="createPerson"/>
+        <result column="money" property="money"/>
+    </resultMap>
+    <select id="selectState0Dingdan"  parameterType="com.example.demo.entity.DingdanInfo" resultMap="selectStateDingdan">
+        select  * from dingdan where state='0'
+    </select>
+    <resultMap id="selectStateDingdan" type="com.example.demo.entity.DingdanInfo">
+        <result column="id" property="id"/>
+        <result column="cname" property="cname"/>
+        <result column="goodType" property="goodType"/>
+        <result column="updateTime" property="updateTime"/>
+        <result column="createTime" property="createTime"/>
+        <result column="beizhu" property="beizhu"/>
+        <result column="state" property="state"/>
+        <result column="createPerson" property="createPerson"/>
+        <result column="money" property="money"/>
+    </resultMap>
+    <select id="selectSumMoney"  parameterType="com.example.demo.entity.Tongji" resultMap="selectSumMoney1">
+        SELECT
+        CONCAT(MONTH(createTime)) AS month1,SUM(money)/10000 money
+        FROM dingdan where YEAR(createTime)='2019'
+        GROUP BY month1
+    </select>
+    <resultMap id="selectSumMoney1" type="com.example.demo.entity.Tongji">
+        <result column="month1" property="month1"/>
+        <result column="money" property="money"/>
+    </resultMap>
+    <select id="selectYearSumMoney"  parameterType="com.example.demo.entity.Tongji" resultMap="selectYearSumMoney1">
+        SELECT
+    CONCAT(year(createTime)) AS year1,SUM(money)/10000 money
+    FROM dingdan
+    GROUP BY year1
+    </select>
+    <resultMap id="selectYearSumMoney1" type="com.example.demo.entity.Tongji">
+        <result column="year1" property="year1"/>
+        <result column="money" property="money"/>
+    </resultMap>
+</mapper>
