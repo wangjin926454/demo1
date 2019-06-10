@@ -23,10 +23,19 @@ public class HeadImgController {
     @RequestMapping("/static/article/upload.do")
     @ResponseBody
     public Map upload(@RequestParam("file") MultipartFile file, HttpServletRequest request) {
-        //String userName = request.getParameter("userName");
-        //System.out.println(userName);
         SelectInfo selectInfo = new SelectInfo();
+        HashMap<String,String> map = new HashMap<>();
         String fileName = file.getOriginalFilename();
+        String fileName1 = fileName.substring(fileName.lastIndexOf("."));
+        System.out.println(fileName1);
+        if(!".jpg".equals(fileName1)){
+            if(!".png".equals(fileName1)){
+                if(!".gif".equals(fileName1)){
+                    map.put("msg","文件格式错误");
+                    return map;
+                }
+            }
+        }
         if(fileName.indexOf("\\") != -1){
             fileName = fileName.substring(fileName.lastIndexOf("\\"));
         }
@@ -40,7 +49,7 @@ public class HeadImgController {
         if(!targetFile.exists()){
             targetFile.mkdirs();
         }
-        HashMap<String,String> map = new HashMap<>();
+
         FileOutputStream out = null;
         try {
             out = new FileOutputStream(filePath+fileName);
@@ -70,8 +79,17 @@ public class HeadImgController {
     @RequestMapping("/static/article/uploadHeTong.do")
     @ResponseBody
     public Map uploadHeTong(@RequestParam("file") MultipartFile file, HttpServletRequest request) {
+        HashMap<String,String> map = new HashMap<>();
         FileInfo fileInfo = new FileInfo();
         String fileName = file.getOriginalFilename();
+        String fileName1 = fileName.substring(fileName.lastIndexOf("."));
+        System.out.println(fileName1);
+        if(!".doc".equals(fileName1)){
+            if(!".docx".equals(fileName1)){
+                map.put("msg","文件格式错误");
+                return map;
+            }
+        }
         if(fileName.indexOf("\\") != -1){
             fileName = fileName.substring(fileName.lastIndexOf("\\"));
         }
@@ -85,7 +103,7 @@ public class HeadImgController {
         if(!targetFile.exists()){
             targetFile.mkdirs();
         }
-        HashMap<String,String> map = new HashMap<>();
+
         FileOutputStream out = null;
         try {
             out = new FileOutputStream(filePath+fileName);
@@ -96,14 +114,14 @@ public class HeadImgController {
             out.close();
             //System.out.println("over");
         } catch (Exception e) {
-            map.put("msg","fail");
+            map.put("msg","保存失败");
             return map;
         }
         int first =  infoService.uploadFile(fileInfo);
         if(first==0){
-            map.put("msg","fail");
+            map.put("msg","保存失败");
         }
-        map.put("msg","success");
+        map.put("msg","保存成功");
         return map;
     }
 }

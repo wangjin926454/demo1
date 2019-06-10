@@ -57,10 +57,6 @@ public class SendEmailController {
             message.setTo(email);				//设置收信人
             message.setSubject("找回密码");	//设置主题
             message.setText(content,true);  	//第二个参数true表示使用HTML语言来编写邮件
-//            FileSystemResource file = new FileSystemResource(  
-//            new File("src/main/resources/static/image/picture.jpg"));  
-//            helper.addAttachment("图片.jpg", file);//添加带附件的邮件  
-//            helper.addInline("picture",file);//添加带静态资源的邮件
             this.mailSender.send(mimeMessage);
             map.put("msg","已发送");
             return map;

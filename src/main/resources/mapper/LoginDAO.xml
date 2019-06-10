@@ -5,17 +5,17 @@
 <mapper namespace="com.example.demo.dao.LoginDAO">
     <!-- 查询所有用户数据 -->
     <select id="adminLogin"  parameterType="com.example.demo.entity.LoginInfo" resultMap="adminLoginMap">
-        select  * from admin where userName=#{userName} and password=#{password}
+        select  * from admin where userName=#{userName,jdbcType=VARCHAR} and password=#{password,jdbcType=VARCHAR}
     </select>
     <resultMap id="adminLoginMap" type="com.example.demo.entity.LoginInfo">
         <result column="userName" property="userName"/>
         <result column="password" property="password"/>
     </resultMap>
     <select id="select"  parameterType="com.example.demo.entity.LoginInfo" resultMap="adminLoginMap">
-        select  password from users where userName=#{userName}
+        select  password from users where userName=#{userName,jdbcType=VARCHAR}
     </select>
     <select id="login"  parameterType="com.example.demo.entity.LoginInfo" resultMap="loginMap">
-        select  * from users where userName=#{userName} and password=#{password}
+        select  * from users where userName=#{userName,jdbcType=VARCHAR} and password=#{password,jdbcType=VARCHAR}
     </select>
     <resultMap id="loginMap" type="com.example.demo.entity.LoginInfo">
         <result column="userName" property="userName"/>

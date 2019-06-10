@@ -5,9 +5,11 @@ import com.example.demo.entity.LoginInfo;
 import com.example.demo.utills.AesUtil;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -17,7 +19,7 @@ public class LoginController {
     @Resource
     private LoginService loginService;
 
-    @RequestMapping("/login.do")
+    @RequestMapping(value="/login.do", method = RequestMethod.POST)
     @ResponseBody
     public Map login(HttpServletRequest request){
         LoginInfo info = new LoginInfo();
@@ -47,6 +49,8 @@ public class LoginController {
             }
         }
         System.out.println(map);
+        HttpSession session = request.getSession();
+        session.setAttribute("userName","1");
         return map;
     }
 }

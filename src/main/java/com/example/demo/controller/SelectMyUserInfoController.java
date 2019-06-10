@@ -91,14 +91,11 @@ public class SelectMyUserInfoController {
             }
         }
         usersInfo.setCqq(request.getParameter("info"));
-        System.out.println(request.getParameter("info"));
         List<SelectMyUsersInfo> list = selectMyUsersService.search(usersInfo);
         System.out.println(list.size());
         for(int i=0;i<list.size();i++){
             map.put("user"+i,list.get(i));
-            //return map;
         }
-        //map.put("msg","没有数据");
         return map;
     }
     @RequestMapping("/static/article/searchAll.do")

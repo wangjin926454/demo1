@@ -114,12 +114,7 @@
                     var str = JSON.stringify(result);
                     //alert(str);
                     var json = JSON.parse(str);
-                    if(json.msg=="success"){
-                        alert("保存成功");
-                        location.reload(true);
-                    }else{
-                        alert("保存失败");
-                    }
+                    alert(json.msg);
                 },
                 error: function () {
                     alert("错误")
