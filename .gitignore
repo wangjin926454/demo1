@@ -1,4 +1,4 @@
-# Compiled class file
+﻿# Compiled class file
 *.class
 
 # Log file
@@ -26,3 +26,7 @@ hs_err_pid*
 .target
 .idea
 .mvn
+target/*
+.mvn/*
+.idea/*
+[mvnw]
